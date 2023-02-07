@@ -3,6 +3,7 @@ const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
+//category get route that returns all the category in json data
 router.get('/', (req, res) => {
   Category.findAll({
     include:[{
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
   })
   .catch((err) => console.log(err));
 });
-
+// get route that uses an id as a param to get an indexed category 
 router.get('/:id', (req, res) => {
   Category.findByPk(req.params.id,{  
     include:[{
@@ -25,6 +26,7 @@ router.get('/:id', (req, res) => {
   .catch((err) => console.log(err));
 });
 
+// post route that creates a new category using data that was passed in the body of the post request
 router.post('/', (req, res) => {
   Category.create(req.body)
     .then((data) => {
@@ -33,6 +35,7 @@ router.post('/', (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// put route that takes in a param and data from body from put request to update the category at the index
 router.put('/:id', (req, res) => {
   Category.update({
     category_name:req.body.category_name,
@@ -55,6 +58,7 @@ router.put('/:id', (req, res) => {
  })
 });
 
+// delete route that takes in a param and delete that index(id) in the category table
 router.delete('/:id', (req, res) => {
     Category.destroy({
       where:{

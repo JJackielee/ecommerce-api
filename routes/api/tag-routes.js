@@ -1,12 +1,11 @@
 const router = require('express').Router();
 const { Tag, Product, ProductTag } = require('../../models');
 
-// The `/api/tags` endpoint
 
+
+//getroute that finds all the tags in the tag table
+//includes product information that is related to the tag as well using junction associations with product_tag table
 router.get('/', (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
-
   Tag.findAll({
     include:{ 
       model:Product,
@@ -17,9 +16,9 @@ router.get('/', (req, res) => {
   .catch((err) => console.log(err));
 });
 
+// get route that takes in a param to find the index tag
+//includes production information that is related to the tag using junction association with product_tag
 router.get('/:id', (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
   Tag.findByPk(req.params.id,{  
     include:{ 
       model:Product,
@@ -30,8 +29,8 @@ router.get('/:id', (req, res) => {
   .catch((err) => console.log(err));
 });
 
+//post route that creates a new tag with data from the body in the post request
 router.post('/', (req, res) => {
-  // create a new tag
   Tag.create(req.body)
   .then((data) => {
       return res.status(200).json(data);
@@ -39,29 +38,30 @@ router.post('/', (req, res) => {
   .catch((err) => console.log(err));
 });
 
+//put route that takes in a param and then updates the indexed tag with the data in the body that was in the put request
 router.put('/:id', (req, res) => {
-  // update a tag's name by its `id` value
   Tag.update({
     tag_name:req.body.tag_name,
- },{
+  },{
      where:{
          id:req.params.id
      }
- }).then(data=>{
+  }).then(data=>{
      if(data[0]){
          return res.json(data)
      } else {
          return res.status(404).json({msg:"no such record"})
      }
- }).catch(err=>{
+  }).catch(err=>{
      console.log(err);
      res.status(500).json({
          msg:"an error occurred",
          err:err
      })
- })
+  })
 });
 
+//delete route that takes in a param and deletes the indexed tag
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
   Tag.destroy({

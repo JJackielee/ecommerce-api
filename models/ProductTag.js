@@ -3,6 +3,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
 class ProductTag extends Model {}
+//producttag model that creates a junction table that has the columns product_id(int), tag_id(int), and id as primary key column 
 
 ProductTag.init(
   {

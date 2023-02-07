@@ -3,7 +3,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection.js');
 
 class Tag extends Model {}
-
+//tag model that creates the tag table that has tag_name(string) and id as primary key column
 Tag.init(
   {
     tag_name:{

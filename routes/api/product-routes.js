@@ -1,22 +1,23 @@
 const router = require('express').Router();
 const { Product, Category, Tag, ProductTag} = require('../../models');
 
-// The `/api/products` endpoint
 
-// get all products
+// get route that returns all the products in the product table
+// it includes the category detail by using the category_id and associating it to the primary id in category table
+// also includes tag detail but junction table by using product_id and tag_id 
 router.get('/', (req, res) => {
   Product.findAll({
-    include:[Category,Tag]
+    include:[Category,Tag],
+    exclude: ['categoryId']
   }) .then((data) => {
       res.status(200).json(data);
   })
   .catch((err) => console.log(err));
-  
-  // find all products
-  // be sure to include its associated Category and Tag data
 });
 
-// get one product
+// get route that takes in a param and returns one products in the product table at the index
+// it includes the category detail by using the category_id and associating it to the primary id in category table
+// also includes tag detail but junction table by using product_id and tag_id 
 router.get('/:id', (req, res) => {
   Product.findByPk(req.params.id,{ 
     include:[Category,Tag]
@@ -24,20 +25,11 @@ router.get('/:id', (req, res) => {
       res.status(200).json(data);
   })
   .catch((err) => console.log(err));  
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
 });
 
-// create new product
+// post route that creates a new product with the information passed into the body of the post request
+// it then checks if theres anythign in the tag if so then it creates and product_tag entry
 router.post('/', (req, res) => {
-  /* req.body should look like this...
-    {
-      product_name: "Basketball",
-      price: 200.00,
-      stock: 3,
-      tagIds: [1, 2, 3, 4]
-    }
-  */
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -60,7 +52,8 @@ router.post('/', (req, res) => {
     });
 });
 
-// update product
+//put route that takes in a param and data from the body that updates a product
+//then it finds all associate tag from product_tag and compares which tag isnt in the updated product
 router.put('/:id', (req, res) => {
   // update product data
   Product.update(req.body, {
@@ -102,6 +95,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+//delete route that takes in a param and delete that product in the index. 
 router.delete('/:id', (req, res) => {
   Product.destroy({
     where:{

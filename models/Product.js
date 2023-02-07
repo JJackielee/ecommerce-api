@@ -5,7 +5,7 @@ const sequelize = require('../config/connection');
 
 
 class Product extends Model {}
-
+//product model that creates product table which has a product_name(String), price(decimal), stock(int), and id primary key column.
 
 Product.init(
   {
